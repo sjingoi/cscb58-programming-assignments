@@ -81,6 +81,14 @@ class Cmp(AssemblyCode):
     op2: Reg | Word
     cond: Cond = Cond.AL
 
+@dataclass
+class Mov(AssemblyCode):
+    """ Represents a MOV R1, Op2 instruction. Op2 is either a Reg or a Word
+        that can be represented as an rotate of an 8-bit word. """
+    r1: Reg
+    op2: Reg | Word
+    cond: Cond = Cond.AL
+
 ######################################################################################
 ## Multiply, Divide
 @dataclass
