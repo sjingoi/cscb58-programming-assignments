@@ -15,7 +15,7 @@ def assembleCode(code: list[LabeledAssemblyCode], out = sys.stdout.buffer):
     for label in labels:
         print("label {0} => {1}".format(label, labels[label]), file=sys.stderr)
 
-    assembleWords(lowerAssemblyCode(newCode))
+    assembleWords(lowerAssemblyCode(newCode), out)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(

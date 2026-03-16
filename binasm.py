@@ -9,7 +9,7 @@ def lowerAssemblyCode(code: list[AssemblyCode]) -> list[Word]:
 
 def assembleCode(code: list[AssemblyCode], out = sys.stdout.buffer):
     """ Assembles a List of AssemblyCode objects to the target file. """
-    assembleWords(lowerAssemblyCode(code))
+    assembleWords(lowerAssemblyCode(code), out)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
