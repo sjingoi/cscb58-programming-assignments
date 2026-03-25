@@ -1,6 +1,6 @@
 from enum import Enum
 from dataclasses import dataclass
-
+from statement import Statement
 
 class UnaryOp(Enum):
     Not = 0
@@ -20,7 +20,7 @@ class BinaryOp(Enum):
     Ne = 9
 
 
-class Expression:
+class Expression(Statement):
     pass
 
 
