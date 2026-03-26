@@ -77,7 +77,7 @@ class VarAccess(Expression):
 
 @dataclass(eq=False)
 class Constant(Expression):
-    value: int | NULL | bool
+    value: int | NULL
 
 
 # Statements

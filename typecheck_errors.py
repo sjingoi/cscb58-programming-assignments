@@ -35,5 +35,5 @@ class ExpressionTypeMismatchError(TypeCheckError):
 
 
 class ConditionalTypeError(TypeCheckError):
-    """Raised when the condition expression in an if or while statement does not have bool type"""
+    """Raised when the condition expression in an if or while statement does not have int type"""
     pass
