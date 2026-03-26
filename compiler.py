@@ -19,7 +19,7 @@ class FunctionInformation:
     varTable: dict[str, TType]
 
 
-def typecheckNode(node, ftable: SymbolTable) -> ExpressionTypes:
+def typecheckNode(node, f_table: SymbolTable, f_current: FunctionInformation) -> ExpressionTypes:
     expr_types: ExpressionTypes = {}
 
     # TODO: Implement typechecking for each node type and add the types of expressions to expr_types
@@ -36,8 +36,9 @@ def typecheckNode(node, ftable: SymbolTable) -> ExpressionTypes:
     return expr_types
 
 
-def generateNode(node, expr_types: ExpressionTypes, ftable: SymbolTable) -> list[LabeledAssemblyCode]:
+def generateNode(node, expr_types: ExpressionTypes, f_table: SymbolTable, f_current: FunctionInformation) -> list[LabeledAssemblyCode]:
     assembly_code: list[LabeledAssemblyCode] = []
+    
     # TODO: Implement assembly code generation for each node type and add the generated instructions to assembly_code
     match node:
         case Function():
@@ -54,35 +55,35 @@ def generateNode(node, expr_types: ExpressionTypes, ftable: SymbolTable) -> list
 
 def typecheck(input_fs: list[Function]) -> tuple[ExpressionTypes, SymbolTable]:
     expr_types: ExpressionTypes = {}
-    ftable: SymbolTable = {}
+    f_table: SymbolTable = {}
 
     # Initialize function table
     for function in input_fs:
         paramTypes: list[TType] = []        # TODO: Initialize paramTypes
         returnType: TType = TType.Int       # TODO: Initialize returnType
-        ftable[function.name] = FunctionInformation(paramTypes, returnType, {})
+        f_table[function.name] = FunctionInformation(paramTypes, returnType, {})
     
     # Run typechecking on each function and add returned types to expr_types
     for function in input_fs:
-        expr_types = expr_types | typecheckNode(function, ftable)
+        expr_types = expr_types | typecheckNode(function, f_table, f_table[function.name])
 
-    return (expr_types, ftable)
+    return (expr_types, f_table)
 
 
-def generate(input_fs: list[Function], expr_types: ExpressionTypes, ftable: SymbolTable) -> list[list[LabeledAssemblyCode]]:
+def generate(input_fs: list[Function], expr_types: ExpressionTypes, f_table: SymbolTable) -> list[list[LabeledAssemblyCode]]:
     assembly_code: list[list[LabeledAssemblyCode]] = []
 
     # Generate each function's labeled assembly code
     for function in input_fs:
-        asm_code = generateNode(function, expr_types, ftable)
+        asm_code = generateNode(function, expr_types, f_table, f_table[function.name])
         assembly_code.append(asm_code)
 
     return assembly_code
 
 
 def compileCode(input_fs: list[Function], output = sys.stdout.buffer):
-    expr_types, ftable = typecheck(input_fs)
-    asm_fns = generate(input_fs, expr_types, ftable)
+    expr_types, f_table = typecheck(input_fs)
+    asm_fns = generate(input_fs, expr_types, f_table)
     concatAsm = [elem for sublist in asm_fns for elem in sublist]
     assembleCode(concatAsm, output)
 
